@@ -1,3 +1,5 @@
+import { ProductProps } from "./ProductProps";
+
 const endpoint = "http://localhost:8080";
 
 // ----- Products ----- //
@@ -9,6 +11,8 @@ async function fetchProducts() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        console.log(data);
+
         return data;
     } catch (error) {
         console.error("An error occured: ", error);
@@ -32,7 +36,7 @@ async function fetchSpecificProduct(id: number) {
     }
 }
 
-async function createNewProduct(products: Product) {
+async function createNewProduct(products: ProductProps) {
     const url = `${endpoint}/api/products/`;
     try {
         const response = await fetch(url, {
@@ -52,7 +56,7 @@ async function createNewProduct(products: Product) {
     }
 }
 
-async function updateProduct(id: number, products: Product) {
+async function updateProduct(id: number, products: ProductProps) {
     const url = `${endpoint}/api/products/${id}`;
     try {
         const response = await fetch(url, {
@@ -77,4 +81,4 @@ async function updateProduct(id: number, products: Product) {
 // ----- Van ----- //
 
 // ----- Export ----- //
-export default { fetchProducts, fetchSpecificProduct, createNewProduct, updateProduct };
+export { fetchProducts, fetchSpecificProduct, createNewProduct, updateProduct };
