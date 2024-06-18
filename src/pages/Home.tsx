@@ -6,31 +6,28 @@ import ModalForm from "../components/product/ModalForm";
 function Home() {
     const [products, setProducts] = useState<ProductProps[]>([]);
 
+    const fetchData = async () => {
+        try {
+            const productsData = await fetchProducts();
+            setProducts(productsData);
+        } catch (error) {
+            console.error("An fetching products: ", error);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const productsData = await fetchProducts();
-                // console.log("Products:", productsData);
-                setProducts(productsData);
-            } catch (error) {
-                console.error("An fetching products: ", error);
-            }
-        };
         fetchData();
     }, []);
 
     return (
         <div className="container">
-            {/* Tilføj et produkt */}
-            {/* find enkelt produkt */}
             <div className="row ">
                 <div className="col-6 col-sm-6 col-md-4 ms-auto mt-4">
-                    <ModalForm />
+                    <ModalForm refreshProducts={fetchData} />
                 </div>
                 <div className="col-6 col-sm-6 col-md-4 mx-auto"></div>
             </div>
 
-            {/* Tabel for alle produkter */}
             <div className="row mt-5 border border-bottom-0 ">
                 <table className="table table-striped mb-0 ">
                     <thead className="">

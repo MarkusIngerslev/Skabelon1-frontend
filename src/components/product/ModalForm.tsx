@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { createNewProduct } from "../../service/apiFacade";
 
-function ModalForm() {
+interface ModalFormProps {
+    refreshProducts: () => void;
+}
+
+function ModalForm({ refreshProducts }: ModalFormProps) {
     const [name, setName] = useState<string>("");
     const [price, setPrice] = useState<number>(0);
     const [weight, setWeight] = useState<number>(0);
@@ -14,11 +18,12 @@ function ModalForm() {
             price: price,
             weight: weight,
         };
-        console.log("New product:", newProduct);
 
         try {
             await createNewProduct(newProduct);
             setShowSuccessMessage(true);
+            refreshProducts();
+
             setTimeout(() => {
                 setShowSuccessMessage(false);
             }, 3000); // 3 seconds
@@ -30,12 +35,10 @@ function ModalForm() {
     return (
         <div>
             <h2>Add a product</h2>
-            {/* Button trigger modal */}
             <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
                 Opret produkt
             </button>
 
-            {/* Modal for trigger */}
             <div
                 className="modal fade"
                 id="addProductModal"
@@ -46,7 +49,7 @@ function ModalForm() {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs 5" id="addProductModalLabel">
+                            <h1 className="modal-title fs-5" id="addProductModalLabel">
                                 Tilføj et produkt
                             </h1>
                             <button
@@ -58,7 +61,6 @@ function ModalForm() {
                         </div>
                         <div className="modal-body">
                             <form>
-                                {/* Name input */}
                                 <div className="row mb-3">
                                     <div className="col-sm-2">
                                         <label htmlFor="inputProductName" className="form-label">
@@ -77,7 +79,6 @@ function ModalForm() {
                                     </div>
                                 </div>
 
-                                {/* Price input */}
                                 <div className="row mb-3">
                                     <div className="col-sm-2">
                                         <label htmlFor="inputProductPrice" className="form-label">
@@ -96,7 +97,6 @@ function ModalForm() {
                                     </div>
                                 </div>
 
-                                {/* Weight input */}
                                 <div className="row mb-3">
                                     <div className="col-sm-2">
                                         <label htmlFor="inputProductWeight" className="form-label">
@@ -115,7 +115,6 @@ function ModalForm() {
                                     </div>
                                 </div>
 
-                                {/* Buttons */}
                                 <button
                                     type="button"
                                     className="btn btn-primary w-50 rounded-0 rounded-start"
