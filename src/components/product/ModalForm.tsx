@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createNewProduct } from "../../service/apiFacade";
+import { createNewProduct, createNewDelivery } from "../../service/apiFacade";
 
 interface ModalFormProps {
     refreshProducts: () => void;
@@ -9,6 +9,10 @@ function ModalForm({ refreshProducts }: ModalFormProps) {
     const [name, setName] = useState<string>("");
     const [price, setPrice] = useState<number>(0);
     const [weight, setWeight] = useState<number>(0);
+    const [distination, setDistination] = useState<string>("");
+    const [fromWarehouse, setFromWarehouse] = useState<string>("");
+    const [totalPrice, setTotalPrice] = useState<number>(0);
+    const [totalWeight, setTotalWeight] = useState<number>(0);
     const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
 
     const addToProductList = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

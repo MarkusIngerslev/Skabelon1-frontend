@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import { fetchProducts } from "../service/apiFacade";
+import { fetchProducts, fetchDeliveries } from "../service/apiFacade";
 import { ProductProps } from "../service/ProductProps";
+import { DeliveryProps } from "../service/DeliveryProps";
 import ModalForm from "../components/product/ModalForm";
 
 function Home() {
     const [products, setProducts] = useState<ProductProps[]>([]);
-    const [searchTerm, setSearchTerm] = useState("");
+    const [deliveries, setDeliveries] = useState<DeliveryProps[]>([]);
+    const [searchTermProd, setSearchTermProd] = useState("");
+    const [searchTermDelv, setSearchTermDelv] = useState("");
 
-    const fetchData = async () => {
+    const fetchProductData = async () => {
         try {
             const productsData = await fetchProducts();
             setProducts(productsData);
@@ -16,35 +19,56 @@ function Home() {
         }
     };
 
+    const fetchDeliveryData = async () => {
+        try {
+            const deliveriesData = await fetchDeliveries();
+            setDeliveries(deliveriesData);
+        } catch (error) {
+            console.error("Error fetching deliveries: ", error);
+        }
+    };
+
     useEffect(() => {
-        fetchData();
+        fetchProductData();
     }, []);
 
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value);
+    useEffect(() => {
+        fetchDeliveryData();
+    }, []);
+
+    const handleSearchProducts = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTermProd(event.target.value);
+    };
+
+    const handleSearchDeliveries = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTermDelv(event.target.value);
     };
 
     const filteredProducts = products.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        product.name.toLowerCase().includes(searchTermProd.toLowerCase())
+    );
+
+    const filteredDeliveries = deliveries.filter((delivery) =>
+        delivery.destination.toLowerCase().includes(searchTermDelv.toLowerCase())
     );
 
     return (
         <div className="container ">
             <div className="row">
                 {/* Products */}
-                <div className="col-lg-6">
+                <div className="col-lg-12">
                     <div className="row ">
                         <div className="col-6 col-sm-6 col-md-4 ms-auto mt-4">
-                            <ModalForm refreshProducts={fetchData} />
+                            <ModalForm refreshProducts={fetchProductData} />
                         </div>
                         <div className="col-6 col-sm-6 col-md-4 mx-auto mt-auto">
                             <input
                                 className="form-control me-2"
                                 type="text"
-                                placeholder="Search"
-                                aria-label="Search"
-                                value={searchTerm}
-                                onChange={handleSearch}
+                                placeholder="Products..."
+                                aria-label="ProductSearch"
+                                value={searchTermProd}
+                                onChange={handleSearchProducts}
                             />
                         </div>
                     </div>
@@ -72,19 +96,19 @@ function Home() {
                 </div>
 
                 {/* Delivery(ies) */}
-                <div className="col-lg-6">
+                <div className="col-lg-12">
                     <div className="row ">
                         <div className="col-6 col-sm-6 col-md-4 ms-auto mt-4">
-                            <ModalForm refreshProducts={fetchData} />
+                            <ModalForm refreshProducts={fetchDeliveryData} />
                         </div>
                         <div className="col-6 col-sm-6 col-md-4 mx-auto mt-auto">
                             <input
                                 className="form-control me-2"
                                 type="text"
-                                placeholder="Search"
-                                aria-label="Search"
-                                value={searchTerm}
-                                onChange={handleSearch}
+                                placeholder="Deliveries..."
+                                aria-label="DeliveriesSearch"
+                                value={searchTermDelv}
+                                onChange={handleSearchDeliveries}
                             />
                         </div>
                     </div>
@@ -92,17 +116,19 @@ function Home() {
                         <table className="table table-striped mb-0 ">
                             <thead className="">
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Price</th>
-                                    <th>Weight</th>
+                                    <th>Leverings adresse</th>
+                                    <th>Varehus</th>
+                                    <th>Total pris</th>
+                                    <th>Total vægt</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredProducts.map((product) => (
-                                    <tr key={product.id}>
-                                        <td>{product.name}</td>
-                                        <td>{product.price} ddk</td>
-                                        <td>{product.weight} gram</td>
+                                {filteredDeliveries.map((deliveries) => (
+                                    <tr key={deliveries.id}>
+                                        <td>{deliveries.destination}</td>
+                                        <td>{deliveries.fromWarehouse}</td>
+                                        <td>{deliveries.totalPrice} ddk</td>
+                                        <td>{deliveries.totalWeight} gram</td>
                                     </tr>
                                 ))}
                             </tbody>
