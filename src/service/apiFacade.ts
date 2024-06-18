@@ -36,8 +36,10 @@ async function fetchSpecificProduct(id: number) {
 }
 
 async function createNewProduct(products: ProductProps) {
-    const url = `${endpoint}/api/products/`;
+    const url = `${endpoint}/api/products`;
     try {
+        console.log("Creating product:", products);
+
         const response = await fetch(url, {
             method: "POST",
             headers: {
