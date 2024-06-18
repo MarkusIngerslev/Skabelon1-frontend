@@ -8,6 +8,7 @@ import DeliveryModalForm from "../components/delivery/DeliveryModalForm";
 function Home() {
     const [products, setProducts] = useState<ProductProps[]>([]);
     const [deliveries, setDeliveries] = useState<DeliveryProps[]>([]);
+    const [productOrders, setProductOrders] = useState<ProductProps[]>([]);
     const [searchTermProd, setSearchTermProd] = useState("");
     const [searchTermDelv, setSearchTermDelv] = useState("");
 
@@ -46,6 +47,22 @@ function Home() {
         setSearchTermDelv(event.target.value);
     };
 
+    const addToProductOrder = (product: ProductProps) => {
+        const existingProduct = productOrders.find((p) => p.id === product.id);
+        if (existingProduct) {
+            const updatedProduct = {
+                ...existingProduct,
+                price: existingProduct.price + product.price,
+                weight: existingProduct.weight + product.weight,
+            };
+            setProductOrders((prevOrders) =>
+                prevOrders.map((p) => (p.id === product.id ? updatedProduct : p))
+            );
+        } else {
+            setProductOrders((prevOrders) => [...prevOrders, product]);
+        }
+    };
+
     const filteredProducts = products.filter((product) =>
         product.name.toLowerCase().includes(searchTermProd.toLowerCase())
     );
@@ -55,11 +72,11 @@ function Home() {
     );
 
     return (
-        <div className="container ">
+        <div className="container">
             <div className="row">
                 {/* Products */}
                 <div className="col-lg-12">
-                    <div className="row ">
+                    <div className="row">
                         <div className="col-6 col-sm-6 col-md-4 ms-auto mt-4">
                             <ModalForm refreshProducts={fetchProductData} />
                         </div>
@@ -75,13 +92,14 @@ function Home() {
                         </div>
                     </div>
 
-                    <div className="mt-5 px-0 border border-bottom-0 ">
-                        <table className="table table-striped mb-0 ">
-                            <thead className="">
+                    <div className="mt-5 px-0 border border-bottom-0">
+                        <table className="table table-striped mb-0">
+                            <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Price</th>
                                     <th>Weight</th>
+                                    <th>Add to Order</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -90,6 +108,9 @@ function Home() {
                                         <td>{product.name}</td>
                                         <td>{product.price} ddk</td>
                                         <td>{product.weight} gram</td>
+                                        <td>
+                                            <button onClick={() => addToProductOrder(product)}>Add to Order</button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -97,9 +118,32 @@ function Home() {
                     </div>
                 </div>
 
+                {/* Product Orders */}
+                <div className="col-lg-12 mt-5">
+                    <h2>Product Orders</h2>
+                    <table className="table table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {productOrders.map((product, index) => (
+                                <tr key={index}>
+                                    <td>{product.name}</td>
+                                    <td>{product.price} ddk</td>
+                                    <td>{product.weight} gram</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
                 {/* Delivery(ies) */}
                 <div className="col-lg-12">
-                    <div className="row ">
+                    <div className="row">
                         <div className="col-6 col-sm-6 col-md-4 ms-auto mt-4">
                             <DeliveryModalForm refreshDeliveries={fetchDeliveryData} />
                         </div>
@@ -114,9 +158,9 @@ function Home() {
                             />
                         </div>
                     </div>
-                    <div className="mt-5 px-0 border border-bottom-0 ">
-                        <table className="table table-striped mb-0 ">
-                            <thead className="">
+                    <div className="mt-5 px-0 border border-bottom-0">
+                        <table className="table table-striped mb-0">
+                            <thead>
                                 <tr>
                                     <th>Leverings adresse</th>
                                     <th>Varehus</th>
