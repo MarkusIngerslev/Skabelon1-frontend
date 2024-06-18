@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchProducts, fetchDeliveries } from "../service/apiFacade";
+import { fetchProducts, fetchDeliveries, createProductOrder } from "../service/apiFacade";
 import { ProductProps } from "../service/ProductProps";
 import { DeliveryProps } from "../service/DeliveryProps";
 import ModalForm from "../components/product/ModalForm";
@@ -56,9 +56,24 @@ function Home() {
                 weight: existingProduct.weight + product.weight,
                 quantity: existingProduct.quantity + 1,
             };
-            setProductOrders((prevOrders) =>
-                prevOrders.map((p) => (p.id === product.id ? updatedProduct : p))
-            );
+            setProductOrders((prevOrders) => prevOrders.map((p) => (p.id === product.id ? updatedProduct : p)));
+        } else {
+            setProductOrders((prevOrders) => [...prevOrders, { ...product, quantity: 1 }]);
+        }
+    };
+
+    const removeFromProductOrder = (product: ProductProps) => {
+        const existingProduct = productOrders.find((p) => p.id === product.id);
+        if (existingProduct?.quantity > 1) {
+            const updatedProduct = {
+                ...existingProduct,
+                price: existingProduct.price - product.price,
+                weight: existingProduct.weight - product.weight,
+                quantity: existingProduct.quantity - 1,
+            };
+            setProductOrders((prevOrders) => prevOrders.map((p) => (p.id === product.id ? updatedProduct : p)));
+        } else if (existingProduct?.quantity === 1) {
+            setProductOrders((prevOrders) => prevOrders.filter((p) => p.id !== product.id));
         } else {
             setProductOrders((prevOrders) => [...prevOrders, { ...product, quantity: 1 }]);
         }
@@ -74,6 +89,35 @@ function Home() {
 
     const totalOrderPrice = productOrders.reduce((total, product) => total + product.price, 0);
     const totalOrderWeight = productOrders.reduce((total, product) => total + product.weight, 0);
+
+    const handleDeliveryCreated = async (newDelivery: DeliveryProps) => {
+        try {
+            // Fetch the latest deliveries to find the newly created one
+            const updatedDeliveries = await fetchDeliveries();
+            const createdDelivery = updatedDeliveries.find(
+                (delivery) =>
+                    delivery.destination === newDelivery.destination &&
+                    delivery.fromWarehouse === newDelivery.fromWarehouse &&
+                    delivery.totalPrice === newDelivery.totalPrice &&
+                    delivery.totalWeight === newDelivery.totalWeight
+            );
+
+            if (createdDelivery) {
+                // Create product orders for each product in the order
+                for (const product of productOrders) {
+                    const productOrder = {
+                        quantity: product.quantity,
+                        product: { id: product.id },
+                        delivery: { id: createdDelivery.id },
+                    };
+                    await createProductOrder(productOrder, createdDelivery.id);
+                }
+            }
+            setProductOrders([]);
+        } catch (error) {
+            console.error("Error handling delivery creation:", error);
+        }
+    };
 
     return (
         <div className="container">
@@ -141,6 +185,11 @@ function Home() {
                                     <td>{product.price} ddk</td>
                                     <td>{product.weight} gram</td>
                                     <td>{product.quantity} </td>
+                                    <td>
+                                        <button onClick={() => removeFromProductOrder(product)}>
+                                            remove from Order
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -151,10 +200,11 @@ function Home() {
                 <div className="col-lg-12">
                     <div className="row">
                         <div className="col-6 col-sm-6 col-md-4 ms-auto mt-4">
-                            <DeliveryModalForm 
-                                refreshDeliveries={fetchDeliveryData} 
+                            <DeliveryModalForm
+                                refreshDeliveries={fetchDeliveryData}
                                 totalPrice={totalOrderPrice}
                                 totalWeight={totalOrderWeight}
+                                onDeliveryCreated={handleDeliveryCreated}
                             />
                         </div>
                         <div className="col-6 col-sm-6 col-md-4 mx-auto mt-auto">

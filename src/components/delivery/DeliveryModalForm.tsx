@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { createNewDelivery } from "../../service/apiFacade";
+import { DeliveryProps } from "../../service/DeliveryProps";
 
 interface ModalFormProps {
     refreshDeliveries: () => void;
     totalPrice: number;
     totalWeight: number;
+    onDeliveryCreated: (newDelivery: DeliveryProps) => void;
 }
 
-function DeliveryModalForm({ refreshDeliveries, totalPrice, totalWeight }: ModalFormProps) {
+function DeliveryModalForm({ refreshDeliveries, totalPrice, totalWeight, onDeliveryCreated }: ModalFormProps) {
     const [distination, setDistination] = useState<string>("");
     const [fromWarehouse, setFromWarehouse] = useState<string>("");
     const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
@@ -25,6 +27,8 @@ function DeliveryModalForm({ refreshDeliveries, totalPrice, totalWeight }: Modal
             await createNewDelivery(newDelivery);
             setShowSuccessMessage(true);
             refreshDeliveries();
+
+            onDeliveryCreated(newDelivery);
 
             setTimeout(() => {
                 setShowSuccessMessage(false);
