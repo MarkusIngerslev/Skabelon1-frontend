@@ -19,7 +19,7 @@ async function fetchProducts() {
     }
 }
 
-async function fetchSpecificProduct(id: number) {
+async function fetchSpecificProductId(id: number) {
     const url = `${endpoint}/api/products/${id}`;
     try {
         const response = await fetch(url);
@@ -27,7 +27,21 @@ async function fetchSpecificProduct(id: number) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        // console.log("Product:", data);
+        return data;
+    } catch (error) {
+        console.error("Error fetching product:", error);
+        throw error;
+    }
+}
+
+async function fetchSpecificProductName(name: string) {
+    const url = `${endpoint}/api/products/search/${name}`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
         return data;
     } catch (error) {
         console.error("Error fetching product:", error);
@@ -82,4 +96,4 @@ async function updateProduct(id: number, products: ProductProps) {
 // ----- Van ----- //
 
 // ----- Export ----- //
-export { fetchProducts, fetchSpecificProduct, createNewProduct, updateProduct };
+export { fetchProducts, fetchSpecificProductId, fetchSpecificProductName, createNewProduct, updateProduct };
