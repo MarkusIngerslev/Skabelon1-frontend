@@ -3,9 +3,11 @@ import { createNewDelivery } from "../../service/apiFacade";
 
 interface ModalFormProps {
     refreshDeliveries: () => void;
+    totalPrice: number;
+    totalWeight: number;
 }
 
-function DeliveryModalForm({ refreshDeliveries }: ModalFormProps) {
+function DeliveryModalForm({ refreshDeliveries, totalPrice, totalWeight }: ModalFormProps) {
     const [distination, setDistination] = useState<string>("");
     const [fromWarehouse, setFromWarehouse] = useState<string>("");
     const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
@@ -15,8 +17,8 @@ function DeliveryModalForm({ refreshDeliveries }: ModalFormProps) {
         const newDelivery = {
             destination: distination,
             fromWarehouse: fromWarehouse,
-            totalPrice: 0,
-            totalWeight: 0,
+            totalPrice: totalPrice,
+            totalWeight: totalWeight,
         };
 
         try {
@@ -105,9 +107,40 @@ function DeliveryModalForm({ refreshDeliveries }: ModalFormProps) {
                                             onChange={(e) => setFromWarehouse(e.target.value)}
                                         />
                                     </div>
-                                    {/* <div id="warehouseHelp" className="form-text col-sm-6">
-                                        Pris for produkt i DDK...
-                                    </div> */}
+                                </div>
+
+                                <div className="row mb-3">
+                                    <div className="col-sm-2">
+                                        <label htmlFor="inputTotalPrice" className="form-label">
+                                            Total pris
+                                        </label>
+                                    </div>
+                                    <div className="col-sm-10">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="inputTotalPrice"
+                                            value={totalPrice}
+                                            readOnly
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="row mb-3">
+                                    <div className="col-sm-2">
+                                        <label htmlFor="inputTotalWeight" className="form-label">
+                                            Total vægt
+                                        </label>
+                                    </div>
+                                    <div className="col-sm-10">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="inputTotalWeight"
+                                            value={totalWeight}
+                                            readOnly
+                                        />
+                                    </div>
                                 </div>
 
                                 <button

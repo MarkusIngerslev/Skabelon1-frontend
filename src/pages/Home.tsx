@@ -72,6 +72,9 @@ function Home() {
         delivery.destination.toLowerCase().includes(searchTermDelv.toLowerCase())
     );
 
+    const totalOrderPrice = productOrders.reduce((total, product) => total + product.price, 0);
+    const totalOrderWeight = productOrders.reduce((total, product) => total + product.weight, 0);
+
     return (
         <div className="container">
             <div className="row">
@@ -148,7 +151,11 @@ function Home() {
                 <div className="col-lg-12">
                     <div className="row">
                         <div className="col-6 col-sm-6 col-md-4 ms-auto mt-4">
-                            <DeliveryModalForm refreshDeliveries={fetchDeliveryData} />
+                            <DeliveryModalForm 
+                                refreshDeliveries={fetchDeliveryData} 
+                                totalPrice={totalOrderPrice}
+                                totalWeight={totalOrderWeight}
+                            />
                         </div>
                         <div className="col-6 col-sm-6 col-md-4 mx-auto mt-auto">
                             <input
