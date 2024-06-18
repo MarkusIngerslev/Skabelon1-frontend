@@ -34,10 +34,21 @@ function ModalForm({ refreshProducts }: ModalFormProps) {
 
     return (
         <div>
-            <h2>Add a product</h2>
-            <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                Opret produkt
-            </button>
+            <div className="row">
+                <div className="col-sm-auto">
+                    <h3>Add a product</h3>
+                </div>
+                <div className="col-sm-5 p-0 ms-auto me-0 ">
+                    <button
+                        type="button"
+                        className="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addProductModal"
+                    >
+                        Opret produkt
+                    </button>
+                </div>
+            </div>
 
             <div
                 className="modal fade"
@@ -131,9 +142,9 @@ function ModalForm({ refreshProducts }: ModalFormProps) {
                                 </button>
                             </form>
                         </div>
-                        <div className="modal-footer">
+                        <div>
                             {showSuccessMessage && (
-                                <div className="alert alert-success" role="alert">
+                                <div className="alert alert-success mb-3 mx-5 text-center" role="alert">
                                     Produktet er blevet tilføjet!
                                 </div>
                             )}

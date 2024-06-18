@@ -34,10 +34,12 @@ function Home() {
                 <div className="col-6 col-sm-6 col-md-4 ms-auto mt-4">
                     <ModalForm refreshProducts={fetchData} />
                 </div>
-                <div className="col-6 col-sm-6 col-md-4 mx-auto my-auto">
+                <div className="col-6 col-sm-6 col-md-4 mx-auto mt-auto">
                     <input
+                        className="form-control me-2"
                         type="text"
-                        placeholder="Search by product name"
+                        placeholder="Search"
+                        aria-label="Search"
                         value={searchTerm}
                         onChange={handleSearch}
                     />
