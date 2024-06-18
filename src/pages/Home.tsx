@@ -29,42 +29,86 @@ function Home() {
     );
 
     return (
-        <div className="container">
-            <div className="row ">
-                <div className="col-6 col-sm-6 col-md-4 ms-auto mt-4">
-                    <ModalForm refreshProducts={fetchData} />
-                </div>
-                <div className="col-6 col-sm-6 col-md-4 mx-auto mt-auto">
-                    <input
-                        className="form-control me-2"
-                        type="text"
-                        placeholder="Search"
-                        aria-label="Search"
-                        value={searchTerm}
-                        onChange={handleSearch}
-                    />
-                </div>
-            </div>
+        <div className="container ">
+            <div className="row">
+                {/* Products */}
+                <div className="col-lg-6">
+                    <div className="row ">
+                        <div className="col-6 col-sm-6 col-md-4 ms-auto mt-4">
+                            <ModalForm refreshProducts={fetchData} />
+                        </div>
+                        <div className="col-6 col-sm-6 col-md-4 mx-auto mt-auto">
+                            <input
+                                className="form-control me-2"
+                                type="text"
+                                placeholder="Search"
+                                aria-label="Search"
+                                value={searchTerm}
+                                onChange={handleSearch}
+                            />
+                        </div>
+                    </div>
 
-            <div className="row mt-5 border border-bottom-0 ">
-                <table className="table table-striped mb-0 ">
-                    <thead className="">
-                        <tr>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Weight</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredProducts.map((product) => (
-                            <tr key={product.id}>
-                                <td>{product.name}</td>
-                                <td>{product.price} ddk</td>
-                                <td>{product.weight} gram</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                    <div className="mt-5 px-0 border border-bottom-0 ">
+                        <table className="table table-striped mb-0 ">
+                            <thead className="">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Weight</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredProducts.map((product) => (
+                                    <tr key={product.id}>
+                                        <td>{product.name}</td>
+                                        <td>{product.price} ddk</td>
+                                        <td>{product.weight} gram</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* Delivery(ies) */}
+                <div className="col-lg-6">
+                    <div className="row ">
+                        <div className="col-6 col-sm-6 col-md-4 ms-auto mt-4">
+                            <ModalForm refreshProducts={fetchData} />
+                        </div>
+                        <div className="col-6 col-sm-6 col-md-4 mx-auto mt-auto">
+                            <input
+                                className="form-control me-2"
+                                type="text"
+                                placeholder="Search"
+                                aria-label="Search"
+                                value={searchTerm}
+                                onChange={handleSearch}
+                            />
+                        </div>
+                    </div>
+                    <div className="mt-5 px-0 border border-bottom-0 ">
+                        <table className="table table-striped mb-0 ">
+                            <thead className="">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Weight</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredProducts.map((product) => (
+                                    <tr key={product.id}>
+                                        <td>{product.name}</td>
+                                        <td>{product.price} ddk</td>
+                                        <td>{product.weight} gram</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     );

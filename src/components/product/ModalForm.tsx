@@ -33,21 +33,19 @@ function ModalForm({ refreshProducts }: ModalFormProps) {
     };
 
     return (
-        <div>
-            <div className="row">
-                <div className="col-sm-auto">
-                    <h3>Add a product</h3>
-                </div>
-                <div className="col-sm-5 p-0 ms-auto me-0 ">
-                    <button
-                        type="button"
-                        className="btn btn-primary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#addProductModal"
-                    >
-                        Opret produkt
-                    </button>
-                </div>
+        <div className="row">
+            <div className="col-12">
+                <h5 className="text-center">Add a product</h5>
+            </div>
+            <div className="col-12 p-0">
+                <button
+                    type="button"
+                    className="btn btn-primary w-100"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addProductModal"
+                >
+                    Opret produkt
+                </button>
             </div>
 
             <div
@@ -96,15 +94,19 @@ function ModalForm({ refreshProducts }: ModalFormProps) {
                                             Price
                                         </label>
                                     </div>
-                                    <div className="col-sm-10">
+                                    <div className="col-sm-4">
                                         <input
                                             type="number"
                                             className="form-control"
                                             id="inputProductPrice"
+                                            aria-describedby="priceHelp"
                                             placeholder="Pris for produkt i DDK..."
                                             value={price}
                                             onChange={(e) => setPrice(Number(e.target.value))}
                                         />
+                                    </div>
+                                    <div id="priceHelp" className="form-text col-sm-6">
+                                        Pris for produkt i DDK...
                                     </div>
                                 </div>
 
@@ -114,15 +116,19 @@ function ModalForm({ refreshProducts }: ModalFormProps) {
                                             Vægt
                                         </label>
                                     </div>
-                                    <div className="col-sm-10">
+                                    <div className="col-sm-4">
                                         <input
                                             type="number"
                                             className="form-control"
                                             id="inputProductWeight"
                                             placeholder="Vægt for produkt i gram..."
+                                            aria-describedby="weightHelp"
                                             value={weight}
                                             onChange={(e) => setWeight(Number(e.target.value))}
                                         />
+                                    </div>
+                                    <div id="weightHelp" className="form-text col-sm-6">
+                                        Vægt for produkt i gram...
                                     </div>
                                 </div>
 
