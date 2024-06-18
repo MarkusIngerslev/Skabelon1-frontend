@@ -54,12 +54,13 @@ function Home() {
                 ...existingProduct,
                 price: existingProduct.price + product.price,
                 weight: existingProduct.weight + product.weight,
+                quantity: existingProduct.quantity + 1,
             };
             setProductOrders((prevOrders) =>
                 prevOrders.map((p) => (p.id === product.id ? updatedProduct : p))
             );
         } else {
-            setProductOrders((prevOrders) => [...prevOrders, product]);
+            setProductOrders((prevOrders) => [...prevOrders, { ...product, quantity: 1 }]);
         }
     };
 
@@ -127,6 +128,7 @@ function Home() {
                                 <th>Name</th>
                                 <th>Price</th>
                                 <th>Weight</th>
+                                <th>Quantity</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -135,6 +137,7 @@ function Home() {
                                     <td>{product.name}</td>
                                     <td>{product.price} ddk</td>
                                     <td>{product.weight} gram</td>
+                                    <td>{product.quantity} </td>
                                 </tr>
                             ))}
                         </tbody>

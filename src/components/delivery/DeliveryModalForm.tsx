@@ -15,6 +15,8 @@ function DeliveryModalForm({ refreshDeliveries }: ModalFormProps) {
         const newDelivery = {
             destination: distination,
             fromWarehouse: fromWarehouse,
+            totalPrice: 0,
+            totalWeight: 0,
         };
 
         try {
