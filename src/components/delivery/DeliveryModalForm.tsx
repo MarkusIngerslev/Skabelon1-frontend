@@ -1,65 +1,63 @@
 import React, { useState } from "react";
-import { createNewProduct } from "../../service/apiFacade";
+import { createNewDelivery } from "../../service/apiFacade";
 
 interface ModalFormProps {
-    refreshProducts: () => void;
+    refreshDeliveries: () => void;
 }
 
-function ModalForm({ refreshProducts }: ModalFormProps) {
-    const [name, setName] = useState<string>("");
-    const [price, setPrice] = useState<number>(0);
-    const [weight, setWeight] = useState<number>(0);
+function DeliveryModalForm({ refreshDeliveries }: ModalFormProps) {
+    const [distination, setDistination] = useState<string>("");
+    const [fromWarehouse, setFromWarehouse] = useState<string>("");
     const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
 
-    const addToProductList = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const addToDeliveryList = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
-        const newProduct = {
-            name: name,
-            price: price,
-            weight: weight,
+        const newDelivery = {
+            destination: distination,
+            fromWarehouse: fromWarehouse,
         };
 
         try {
-            await createNewProduct(newProduct);
+            await createNewDelivery(newDelivery);
             setShowSuccessMessage(true);
-            refreshProducts();
+            refreshDeliveries();
 
             setTimeout(() => {
                 setShowSuccessMessage(false);
             }, 3000); // 3 seconds
         } catch (error) {
-            console.error("Error in addToProductList:", error);
+            console.error("Error in addToDeliveryList:", error);
         }
     };
 
     return (
         <div className="row">
             <div className="col-12">
-                <h5 className="text-center">Tilføj et produkt</h5>
+                <h5 className="text-center">Tilføj en leverance</h5>
             </div>
             <div className="col-12 p-0">
                 <button
                     type="button"
                     className="btn btn-primary w-100"
                     data-bs-toggle="modal"
-                    data-bs-target="#addProductModal"
+                    data-bs-target="#addDeliveryModal"
                 >
-                    Opret produkt
+                    Opret leverance
                 </button>
             </div>
 
             <div
                 className="modal fade"
-                id="addProductModal"
+                id="addDeliveryModal"
                 tabIndex={-1}
-                aria-labelledby="addProductModalLabel"
+                aria-labelledby="addDeliveryModalLabel"
                 aria-hidden="true"
             >
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="addProductModalLabel">
-                                Tilføj et produkt
+                            <h1 className="modal-title fs-5" id="addDeliveryModalLabel">
+                                Opret en delivery
                             </h1>
                             <button
                                 type="button"
@@ -72,70 +70,48 @@ function ModalForm({ refreshProducts }: ModalFormProps) {
                             <form>
                                 <div className="row mb-3">
                                     <div className="col-sm-2">
-                                        <label htmlFor="inputProductName" className="form-label">
-                                            Name
+                                        <label htmlFor="inputDeliveryName" className="form-label">
+                                            Distination
                                         </label>
                                     </div>
                                     <div className="col-sm-10">
                                         <input
                                             type="text"
                                             className="form-control"
-                                            id="inputProductName"
+                                            id="inputDeliveryName"
                                             placeholder="Navnet på produkt der skal tilføjes..."
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
+                                            value={distination}
+                                            onChange={(e) => setDistination(e.target.value)}
                                         />
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="col-sm-2">
-                                        <label htmlFor="inputProductPrice" className="form-label">
-                                            Price
+                                        <label htmlFor="inputDeliveryWarehouse" className="form-label">
+                                            Varehus
                                         </label>
                                     </div>
-                                    <div className="col-sm-4">
+                                    <div className="col-sm-10">
                                         <input
-                                            type="number"
+                                            type="text"
                                             className="form-control"
-                                            id="inputProductPrice"
-                                            aria-describedby="priceHelp"
-                                            placeholder="Pris for produkt i DDK..."
-                                            value={price}
-                                            onChange={(e) => setPrice(Number(e.target.value))}
+                                            id="inputDeliveryWarehouse"
+                                            aria-describedby="warehouseHelp"
+                                            placeholder="Varehus navn..."
+                                            value={fromWarehouse}
+                                            onChange={(e) => setFromWarehouse(e.target.value)}
                                         />
                                     </div>
-                                    <div id="priceHelp" className="form-text col-sm-6">
+                                    {/* <div id="warehouseHelp" className="form-text col-sm-6">
                                         Pris for produkt i DDK...
-                                    </div>
-                                </div>
-
-                                <div className="row mb-3">
-                                    <div className="col-sm-2">
-                                        <label htmlFor="inputProductWeight" className="form-label">
-                                            Vægt
-                                        </label>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <input
-                                            type="number"
-                                            className="form-control"
-                                            id="inputProductWeight"
-                                            placeholder="Vægt for produkt i gram..."
-                                            aria-describedby="weightHelp"
-                                            value={weight}
-                                            onChange={(e) => setWeight(Number(e.target.value))}
-                                        />
-                                    </div>
-                                    <div id="weightHelp" className="form-text col-sm-6">
-                                        Vægt for produkt i gram...
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 <button
                                     type="button"
                                     className="btn btn-primary w-50 rounded-0 rounded-start"
-                                    onClick={addToProductList}
+                                    onClick={addToDeliveryList}
                                 >
                                     Submit
                                 </button>
@@ -151,7 +127,7 @@ function ModalForm({ refreshProducts }: ModalFormProps) {
                         <div>
                             {showSuccessMessage && (
                                 <div className="alert alert-success mb-3 mx-5 text-center" role="alert">
-                                    Produktet er blevet tilføjet!
+                                    Leverancen er blevet tilføjet!
                                 </div>
                             )}
                         </div>
@@ -162,4 +138,4 @@ function ModalForm({ refreshProducts }: ModalFormProps) {
     );
 }
 
-export default ModalForm;
+export default DeliveryModalForm;

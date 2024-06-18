@@ -3,6 +3,7 @@ import { fetchProducts, fetchDeliveries } from "../service/apiFacade";
 import { ProductProps } from "../service/ProductProps";
 import { DeliveryProps } from "../service/DeliveryProps";
 import ModalForm from "../components/product/ModalForm";
+import DeliveryModalForm from "../components/delivery/DeliveryModalForm";
 
 function Home() {
     const [products, setProducts] = useState<ProductProps[]>([]);
@@ -23,6 +24,7 @@ function Home() {
         try {
             const deliveriesData = await fetchDeliveries();
             setDeliveries(deliveriesData);
+            console.log("Deliveries: ", deliveriesData);
         } catch (error) {
             console.error("Error fetching deliveries: ", error);
         }
@@ -99,13 +101,13 @@ function Home() {
                 <div className="col-lg-12">
                     <div className="row ">
                         <div className="col-6 col-sm-6 col-md-4 ms-auto mt-4">
-                            <ModalForm refreshProducts={fetchDeliveryData} />
+                            <DeliveryModalForm refreshDeliveries={fetchDeliveryData} />
                         </div>
                         <div className="col-6 col-sm-6 col-md-4 mx-auto mt-auto">
                             <input
                                 className="form-control me-2"
                                 type="text"
-                                placeholder="Deliveries..."
+                                placeholder="Leverancer..."
                                 aria-label="DeliveriesSearch"
                                 value={searchTermDelv}
                                 onChange={handleSearchDeliveries}
