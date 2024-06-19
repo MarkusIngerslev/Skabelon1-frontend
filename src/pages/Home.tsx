@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchProducts, fetchDeliveries, createProductOrder } from "../service/apiFacade";
 import { ProductProps } from "../service/ProductProps";
-import { DeliveryProps } from "../service/DeliveryProps";
+import { DeliveryProps, ProductOrderProps } from "../service/DeliveryProps";
 import ModalForm from "../components/product/ModalForm";
 import DeliveryModalForm from "../components/delivery/DeliveryModalForm";
 
@@ -33,9 +33,6 @@ function Home() {
 
     useEffect(() => {
         fetchProductData();
-    }, []);
-
-    useEffect(() => {
         fetchDeliveryData();
     }, []);
 
@@ -45,6 +42,10 @@ function Home() {
 
     const handleSearchDeliveries = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTermDelv(event.target.value);
+    };
+
+    const formatProductOrders = (productOrders: ProductOrderProps[] | undefined) => {
+        return (productOrders ?? []).map((order) => `${order.product?.name} : ${order.quantity}`).join(", ");
     };
 
     const addToProductOrder = (product: ProductProps) => {
@@ -64,7 +65,7 @@ function Home() {
 
     const removeFromProductOrder = (product: ProductProps) => {
         const existingProduct = productOrders.find((p) => p.id === product.id);
-        if (existingProduct?.quantity > 1) {
+        if (existingProduct?.quantity && existingProduct.quantity > 1) {
             const updatedProduct = {
                 ...existingProduct,
                 price: existingProduct.price - product.price,
@@ -176,6 +177,7 @@ function Home() {
                                 <th>Price</th>
                                 <th>Weight</th>
                                 <th>Quantity</th>
+                                <th>Fjern fra ordre</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -184,7 +186,7 @@ function Home() {
                                     <td>{product.name}</td>
                                     <td>{product.price} ddk</td>
                                     <td>{product.weight} gram</td>
-                                    <td>{product.quantity} </td>
+                                    <td>{product.quantity}</td>
                                     <td>
                                         <button onClick={() => removeFromProductOrder(product)}>
                                             remove from Order
@@ -226,15 +228,17 @@ function Home() {
                                     <th>Varehus</th>
                                     <th>Total pris</th>
                                     <th>Total vægt</th>
+                                    <th>Produkter</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredDeliveries.map((deliveries) => (
-                                    <tr key={deliveries.id}>
-                                        <td>{deliveries.destination}</td>
-                                        <td>{deliveries.fromWarehouse}</td>
-                                        <td>{deliveries.totalPrice} ddk</td>
-                                        <td>{deliveries.totalWeight} gram</td>
+                                {filteredDeliveries.map((delivery: DeliveryProps) => (
+                                    <tr key={delivery.id}>
+                                        <td>{delivery.destination}</td>
+                                        <td>{delivery.fromWarehouse}</td>
+                                        <td>{delivery.totalPrice} ddk</td>
+                                        <td>{delivery.totalWeight} gram</td>
+                                        <td>{formatProductOrders(delivery.productOrders)}</td>
                                     </tr>
                                 ))}
                             </tbody>
